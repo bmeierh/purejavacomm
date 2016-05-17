@@ -30,22 +30,14 @@
 
 package jtermios.windows;
 
-import static jtermios.JTermios.JTermiosLogging.log;
-import static jtermios.JTermios.JTermiosLogging.ref;
-
 import java.util.Arrays;
 import java.util.List;
 
-import com.sun.jna.FromNativeContext;
-import com.sun.jna.IntegerType;
-import com.sun.jna.LastErrorException;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import com.sun.jna.Pointer;
-import com.sun.jna.PointerType;
-import com.sun.jna.Structure;
+import com.sun.jna.*;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.StdCallLibrary;
+
+import static jtermios.JTermios.JTermiosLogging.*;
 
 /**
  * This WinAPI class implements a simple wrapper API to access the Windows COM
@@ -135,7 +127,6 @@ public class WinAPI {
 			immutable = true;
 		}
 
-		@Override
 		public Object fromNative(Object nativeValue, FromNativeContext context) {
 			Object o = super.fromNative(nativeValue, context);
 			if (NULL.equals(o))
@@ -145,7 +136,6 @@ public class WinAPI {
 			return o;
 		}
 
-		@Override
 		public void setPointer(Pointer p) {
 			if (immutable) {
 				throw new UnsupportedOperationException("immutable");
@@ -159,88 +149,60 @@ public class WinAPI {
 	public static HANDLE NULL = new HANDLE(Pointer.createConstant(0));
 
 	public static class Windows_kernel32_lib_Direct implements Windows_kernel32_lib {
-		@Override
 		native public HANDLE CreateFile(String name, int access, int mode, SECURITY_ATTRIBUTES security, int create, int atteribs, Pointer template) throws LastErrorException;
 
-		//@Override
-		//native public boolean WriteFile(HANDLE hFile, byte[] buf, int wrn, int[] nwrtn, Pointer lpOverlapped) throws LastErrorException;
+		native public boolean WriteFile(HANDLE hFile, byte[] buf, int wrn, int[] nwrtn, Pointer lpOverlapped) throws LastErrorException;
 
-		@Override
 		native public boolean WriteFile(HANDLE hFile, Pointer buf, int wrn, int[] nwrtn, Pointer lpOverlapped) throws LastErrorException;
 
-		//@Override
-		//native public boolean ReadFile(HANDLE hFile, byte[] buf, int rdn, int[] nrd, Pointer lpOverlapped) throws LastErrorException;
+		native public boolean ReadFile(HANDLE hFile, byte[] buf, int rdn, int[] nrd, Pointer lpOverlapped) throws LastErrorException;
 
-		@Override
 		native public boolean ReadFile(HANDLE hFile, Pointer lpBuffer, int rdn, int[] nrd, Pointer lpOverlapped) throws LastErrorException;
 
-		@Override
 		native public boolean FlushFileBuffers(HANDLE hFile) throws LastErrorException;
 
-		@Override
 		native public boolean PurgeComm(HANDLE hFile, int qmask) throws LastErrorException;
 
-		@Override
 		native public boolean CancelIo(HANDLE hFile) throws LastErrorException;
 
-		@Override
 		native public boolean CloseHandle(HANDLE hFile) throws LastErrorException;
 
-		@Override
 		native public boolean ClearCommError(HANDLE hFile, int[] n, COMSTAT s) throws LastErrorException;
 
-		@Override
 		native public boolean SetCommMask(HANDLE hFile, int dwEvtMask) throws LastErrorException;
 
-		@Override
 		native public boolean GetCommMask(HANDLE hFile, int[] dwEvtMask) throws LastErrorException;
 
-		@Override
 		native public boolean GetCommState(HANDLE hFile, DCB dcb) throws LastErrorException;
 
-		@Override
 		native public boolean SetCommState(HANDLE hFile, DCB dcb) throws LastErrorException;
 
-		@Override
 		native public boolean SetCommTimeouts(HANDLE hFile, COMMTIMEOUTS tout) throws LastErrorException;
 
-		@Override
 		native public boolean SetupComm(HANDLE hFile, int dwInQueue, int dwOutQueue) throws LastErrorException;
 
-		@Override
 		native public boolean SetCommBreak(HANDLE hFile) throws LastErrorException;
 
-		@Override
 		native public boolean ClearCommBreak(HANDLE hFile) throws LastErrorException;
 
-		@Override
 		native public boolean GetCommModemStatus(HANDLE hFile, int[] stat) throws LastErrorException;
 
-		@Override
 		native public boolean EscapeCommFunction(HANDLE hFile, int func) throws LastErrorException;
 
-		@Override
 		native public HANDLE CreateEvent(SECURITY_ATTRIBUTES lpEventAttributes, boolean bManualReset, boolean bInitialState, String lpName) throws LastErrorException;
 
-		@Override
 		native public boolean ResetEvent(HANDLE hEvent) throws LastErrorException;
 
-		@Override
 		native public boolean SetEvent(HANDLE hEvent) throws LastErrorException;
 
-		@Override
 		native public boolean WaitCommEvent(HANDLE hFile, IntByReference lpEvtMask, Pointer lpOverlapped) throws LastErrorException;
 
-		@Override
 		native public int WaitForSingleObject(HANDLE hHandle, int dwMilliseconds);
-		
-		@Override
-		native public boolean GetOverlappedResult(HANDLE hFile, Pointer lpOverlapped, int[] lpNumberOfBytesTransferred, boolean bWait) throws LastErrorException;		
 
-		@Override
+		native public boolean GetOverlappedResult(HANDLE hFile, Pointer lpOverlapped, int[] lpNumberOfBytesTransferred, boolean bWait) throws LastErrorException;
+
 		native public int FormatMessageW(int flags, Pointer src, int msgId, int langId, Pointer dst, int sze, Pointer va_list);
 
-		@Override
 		native public int QueryDosDevice(String name, byte[] buffer, int bsize) throws LastErrorException;
 
 	}
@@ -252,11 +214,11 @@ public class WinAPI {
         public interface Windows_kernel32_lib extends StdCallLibrary {
 		public HANDLE CreateFile(String name, int access, int mode, SECURITY_ATTRIBUTES security, int create, int atteribs, Pointer template);
 
-		//public boolean WriteFile(HANDLE hFile, byte[] buf, int wrn, int[] nwrtn, Pointer lpOverlapped);
+		public boolean WriteFile(HANDLE hFile, byte[] buf, int wrn, int[] nwrtn, Pointer lpOverlapped);
 
 		public boolean WriteFile(HANDLE hFile, Pointer buf, int wrn, int[] nwrtn, Pointer lpOverlapped);
 
-		//public boolean ReadFile(HANDLE hFile, byte[] buf, int rdn, int[] nrd, Pointer lpOverlapped);
+		public boolean ReadFile(HANDLE hFile, byte[] buf, int rdn, int[] nrd, Pointer lpOverlapped);
 
 		public boolean ReadFile(HANDLE hFile, Pointer lpBuffer, int rdn, int[] nrd, Pointer lpOverlapped);
 
@@ -497,7 +459,6 @@ public class WinAPI {
 			setAutoSynch(false);
 		}
 
-		@Override
 		public String toString() {
 			return String.format(//
 					"[Offset %d OffsetHigh %d hEvent %s]",//
@@ -570,7 +531,6 @@ public class WinAPI {
 			);
 		}
 
-		@Override
 		public String toString() {
 			return String.format(//
 					"[BaudRate %d fFlags %04X wReserved %d XonLim %d XoffLim %d ByteSize %d Parity %d StopBits %d XonChar %02X XoffChar %02X ErrorChar %02X EofChar %02X EvtChar %02X wReserved1 %d]", //
@@ -596,7 +556,6 @@ public class WinAPI {
 			);
 		}
 
-		@Override
 		public String toString() {
 			return String.format(//
 					"[ReadIntervalTimeout %d ReadTotalTimeoutMultiplier %d ReadTotalTimeoutConstant %d WriteTotalTimeoutMultiplier %d WriteTotalTimeoutConstant %d]", //
@@ -626,7 +585,6 @@ public class WinAPI {
 			);
 		}
 
-		@Override
 		public String toString() {
 			return String.format("[fFlags %04X cbInQue %d cbInQue %d]", fFlags, cbInQue, cbOutQue);
 		}
@@ -646,6 +604,21 @@ public class WinAPI {
 		return h;
 	}
 
+	// This is for synchronous writes only
+	static public boolean WriteFile(HANDLE hFile, byte[] buf, int wrn, int[] nwrtn) {
+		log = log && log(5, "> WriteFile(%s, %s, %d, [%d])\n", hFile, log(buf, wrn), wrn, nwrtn[0]);
+                boolean res;
+                try {
+                    res = m_K32lib.WriteFile(hFile, buf, wrn, nwrtn, null);
+                    LastError.get()[0] = 0;
+                } catch (LastErrorException le) {
+                    res = false;
+                    LastError.get()[0] = le.getErrorCode();
+                }
+		log = log && log(4, "< WriteFile(%s, %s, %d, [%d]) => %s\n", hFile, log(buf, wrn), wrn, nwrtn[0], res);
+		return res;
+	}
+
 	// This can be used with synchronous as well as overlapped writes
 	static public boolean WriteFile(HANDLE hFile, Pointer buf, int wrn, int[] nwrtn, OVERLAPPED ovrlp) {
 		log = log && log(5, "> WriteFile(%s, %s, %d, [%d], %s)\n", hFile, log(buf.getByteArray(0, wrn), 5), wrn, nwrtn[0], ref(ovrlp));
@@ -658,6 +631,21 @@ public class WinAPI {
                     LastError.get()[0] = le.getErrorCode();
                 }
 		log = log && log(4, "< WriteFile(%s, %s, %d, [%d], %s) => %s\n", hFile, log(buf.getByteArray(0, wrn), 5), wrn, nwrtn[0], ref(ovrlp), res);
+		return res;
+	}
+
+	// This is for synchronous reads only
+	static public boolean ReadFile(HANDLE hFile, byte[] buf, int rdn, int[] nrd) {
+		log = log && log(5, "> ReadFile(%s, %s, %d, [%d])\n", hFile, log(buf, rdn), rdn, nrd[0]);
+                boolean res;
+                try {
+                    res = m_K32lib.ReadFile(hFile, buf, rdn, nrd, null);
+                    LastError.get()[0] = 0;
+                } catch (LastErrorException le) {
+                    res = false;
+                    LastError.get()[0] = le.getErrorCode();
+                }
+		log = log && log(4, "< ReadFile(%s, %s, %d, [%d]) => %s\n", hFile, log(buf, rdn), rdn, nrd[0], res);
 		return res;
 	}
 
@@ -939,6 +927,22 @@ public class WinAPI {
                     LastError.get()[0] = le.getErrorCode();
                 }
 		log = log && log(4, "< WaitCommEvent(%s, [%d], %s) => %s\n", hFile, lpEvtMask.getValue(), ref(ovl), res);
+		return res;
+	}
+
+	static public boolean WaitCommEvent(HANDLE hFile, int[] lpEvtMask) {
+		log = log && log(5, "> WaitCommEvent(%s, [%d], %s) => %s\n", hFile, lpEvtMask[0], null);
+                IntByReference brlpEvtMask = new IntByReference(lpEvtMask[0]);
+                boolean res;
+                try {
+                    res = m_K32lib.WaitCommEvent(hFile, brlpEvtMask, null);
+                    LastError.get()[0] = 0;
+                } catch (LastErrorException le) {
+                    res = false;
+                    LastError.get()[0] = le.getErrorCode();
+                }
+                lpEvtMask[0] = brlpEvtMask.getValue();
+		log = log && log(4, "< WaitCommEvent(%s, [%d], %s) => %s\n", hFile, lpEvtMask[0], null, res);
 		return res;
 	}
 

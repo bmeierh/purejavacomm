@@ -30,190 +30,18 @@
 
 package jtermios.windows;
 
-import static jtermios.JTermios.B110;
-import static jtermios.JTermios.B115200;
-import static jtermios.JTermios.B1200;
-import static jtermios.JTermios.B134;
-import static jtermios.JTermios.B14400;
-import static jtermios.JTermios.B150;
-import static jtermios.JTermios.B1800;
-import static jtermios.JTermios.B19200;
-import static jtermios.JTermios.B200;
-import static jtermios.JTermios.B230400;
-import static jtermios.JTermios.B2400;
-import static jtermios.JTermios.B28800;
-import static jtermios.JTermios.B300;
-import static jtermios.JTermios.B38400;
-import static jtermios.JTermios.B4800;
-import static jtermios.JTermios.B50;
-import static jtermios.JTermios.B57600;
-import static jtermios.JTermios.B600;
-import static jtermios.JTermios.B7200;
-import static jtermios.JTermios.B75;
-import static jtermios.JTermios.B76800;
-import static jtermios.JTermios.B9600;
-import static jtermios.JTermios.BRKINT;
-import static jtermios.JTermios.CMSPAR;
-import static jtermios.JTermios.CRTSCTS;
-import static jtermios.JTermios.CS5;
-import static jtermios.JTermios.CS6;
-import static jtermios.JTermios.CS7;
-import static jtermios.JTermios.CS8;
-import static jtermios.JTermios.CSIZE;
-import static jtermios.JTermios.CSTOPB;
-import static jtermios.JTermios.EAGAIN;
-import static jtermios.JTermios.EBADF;
-import static jtermios.JTermios.EBUSY;
-import static jtermios.JTermios.ECHO;
-import static jtermios.JTermios.ECHONL;
-import static jtermios.JTermios.EINTR;
-import static jtermios.JTermios.EINVAL;
-import static jtermios.JTermios.EMFILE;
-import static jtermios.JTermios.ENOENT;
-import static jtermios.JTermios.ENOTSUP;
-import static jtermios.JTermios.FIONREAD;
-import static jtermios.JTermios.F_GETFL;
-import static jtermios.JTermios.F_SETFL;
-import static jtermios.JTermios.ICANON;
-import static jtermios.JTermios.ICRNL;
-import static jtermios.JTermios.IEXTEN;
-import static jtermios.JTermios.IGNBRK;
-import static jtermios.JTermios.IGNCR;
-import static jtermios.JTermios.INLCR;
-import static jtermios.JTermios.ISIG;
-import static jtermios.JTermios.ISTRIP;
-import static jtermios.JTermios.IXANY;
-import static jtermios.JTermios.IXOFF;
-import static jtermios.JTermios.IXON;
-import static jtermios.JTermios.OPOST;
-import static jtermios.JTermios.O_NONBLOCK;
-import static jtermios.JTermios.PARENB;
-import static jtermios.JTermios.PARMRK;
-import static jtermios.JTermios.PARODD;
-import static jtermios.JTermios.TCIFLUSH;
-import static jtermios.JTermios.TCIOFLUSH;
-import static jtermios.JTermios.TCOFLUSH;
-import static jtermios.JTermios.TCSANOW;
-import static jtermios.JTermios.TIOCMGET;
-import static jtermios.JTermios.TIOCMSET;
-import static jtermios.JTermios.TIOCM_CAR;
-import static jtermios.JTermios.TIOCM_CTS;
-import static jtermios.JTermios.TIOCM_DSR;
-import static jtermios.JTermios.TIOCM_DTR;
-import static jtermios.JTermios.TIOCM_RNG;
-import static jtermios.JTermios.TIOCM_RTS;
-import static jtermios.JTermios.VEOF;
-import static jtermios.JTermios.VMIN;
-import static jtermios.JTermios.VSTART;
-import static jtermios.JTermios.VSTOP;
-import static jtermios.JTermios.VTIME;
-import static jtermios.JTermios.JTermiosLogging.lineno;
-import static jtermios.JTermios.JTermiosLogging.log;
-import static jtermios.windows.WinAPI.CBR_110;
-import static jtermios.windows.WinAPI.CBR_115200;
-import static jtermios.windows.WinAPI.CBR_1200;
-import static jtermios.windows.WinAPI.CBR_128000;
-import static jtermios.windows.WinAPI.CBR_14400;
-import static jtermios.windows.WinAPI.CBR_19200;
-import static jtermios.windows.WinAPI.CBR_2400;
-import static jtermios.windows.WinAPI.CBR_256000;
-import static jtermios.windows.WinAPI.CBR_300;
-import static jtermios.windows.WinAPI.CBR_38400;
-import static jtermios.windows.WinAPI.CBR_4800;
-import static jtermios.windows.WinAPI.CBR_57600;
-import static jtermios.windows.WinAPI.CBR_600;
-import static jtermios.windows.WinAPI.CBR_9600;
-import static jtermios.windows.WinAPI.CLRDTR;
-import static jtermios.windows.WinAPI.CLRRTS;
-import static jtermios.windows.WinAPI.ClearCommBreak;
-import static jtermios.windows.WinAPI.ClearCommError;
-import static jtermios.windows.WinAPI.CloseHandle;
-import static jtermios.windows.WinAPI.CreateEvent;
-import static jtermios.windows.WinAPI.CreateFile;
-import static jtermios.windows.WinAPI.ERROR_FILE_NOT_FOUND;
-import static jtermios.windows.WinAPI.ERROR_INSUFFICIENT_BUFFER;
-import static jtermios.windows.WinAPI.ERROR_IO_INCOMPLETE;
-import static jtermios.windows.WinAPI.ERROR_IO_PENDING;
-import static jtermios.windows.WinAPI.EVENPARITY;
-import static jtermios.windows.WinAPI.EV_RXCHAR;
-import static jtermios.windows.WinAPI.EV_TXEMPTY;
-import static jtermios.windows.WinAPI.EscapeCommFunction;
-import static jtermios.windows.WinAPI.FILE_FLAG_OVERLAPPED;
-import static jtermios.windows.WinAPI.FORMAT_MESSAGE_FROM_SYSTEM;
-import static jtermios.windows.WinAPI.FORMAT_MESSAGE_IGNORE_INSERTS;
-import static jtermios.windows.WinAPI.FlushFileBuffers;
-import static jtermios.windows.WinAPI.FormatMessageW;
-import static jtermios.windows.WinAPI.GENERIC_READ;
-import static jtermios.windows.WinAPI.GENERIC_WRITE;
-import static jtermios.windows.WinAPI.GetCommMask;
-import static jtermios.windows.WinAPI.GetCommModemStatus;
-import static jtermios.windows.WinAPI.GetCommState;
-import static jtermios.windows.WinAPI.GetLastError;
-import static jtermios.windows.WinAPI.GetOverlappedResult;
-import static jtermios.windows.WinAPI.INFINITE;
-import static jtermios.windows.WinAPI.INVALID_HANDLE_VALUE;
-import static jtermios.windows.WinAPI.LANG_NEUTRAL;
-import static jtermios.windows.WinAPI.MAKELANGID;
-import static jtermios.windows.WinAPI.MARKPARITY;
-import static jtermios.windows.WinAPI.MAXDWORD;
-import static jtermios.windows.WinAPI.MS_CTS_ON;
-import static jtermios.windows.WinAPI.MS_DSR_ON;
-import static jtermios.windows.WinAPI.MS_RING_ON;
-import static jtermios.windows.WinAPI.MS_RLSD_ON;
-import static jtermios.windows.WinAPI.NOPARITY;
-import static jtermios.windows.WinAPI.NULL;
-import static jtermios.windows.WinAPI.ODDPARITY;
-import static jtermios.windows.WinAPI.ONE5STOPBITS;
-import static jtermios.windows.WinAPI.ONESTOPBIT;
-import static jtermios.windows.WinAPI.OPEN_EXISTING;
-import static jtermios.windows.WinAPI.PURGE_RXABORT;
-import static jtermios.windows.WinAPI.PURGE_TXABORT;
-import static jtermios.windows.WinAPI.PurgeComm;
-import static jtermios.windows.WinAPI.QueryDosDevice;
-import static jtermios.windows.WinAPI.ReadFile;
-import static jtermios.windows.WinAPI.ResetEvent;
-import static jtermios.windows.WinAPI.SETDTR;
-import static jtermios.windows.WinAPI.SETRTS;
-import static jtermios.windows.WinAPI.SPACEPARITY;
-import static jtermios.windows.WinAPI.SUBLANG_DEFAULT;
-import static jtermios.windows.WinAPI.SetCommBreak;
-import static jtermios.windows.WinAPI.SetCommMask;
-import static jtermios.windows.WinAPI.SetCommState;
-import static jtermios.windows.WinAPI.SetCommTimeouts;
-import static jtermios.windows.WinAPI.SetEvent;
-import static jtermios.windows.WinAPI.SetupComm;
-import static jtermios.windows.WinAPI.TWOSTOPBITS;
-import static jtermios.windows.WinAPI.WAIT_OBJECT_0;
-import static jtermios.windows.WinAPI.WAIT_TIMEOUT;
-import static jtermios.windows.WinAPI.WaitCommEvent;
-import static jtermios.windows.WinAPI.WaitForMultipleObjects;
-import static jtermios.windows.WinAPI.WriteFile;
-import static jtermios.windows.WinAPI.DCB.fBinary;
-import static jtermios.windows.WinAPI.DCB.fInX;
-import static jtermios.windows.WinAPI.DCB.fOutX;
-import static jtermios.windows.WinAPI.DCB.fOutxCtsFlow;
-import static jtermios.windows.WinAPI.DCB.fParity;
-import static jtermios.windows.WinAPI.DCB.fRtsControl;
-import static jtermios.windows.WinAPI.DCB.fTXContinueOnXoff;
-
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
-import com.sun.jna.Memory;
+import com.sun.jna.*;
 import com.sun.jna.ptr.IntByReference;
 
-import jtermios.JTermios;
-import jtermios.JTermios.FDSet;
-import jtermios.Pollfd;
-import jtermios.Termios;
-import jtermios.TimeVal;
-import jtermios.windows.WinAPI.COMMTIMEOUTS;
-import jtermios.windows.WinAPI.COMSTAT;
-import jtermios.windows.WinAPI.DCB;
-import jtermios.windows.WinAPI.HANDLE;
-import jtermios.windows.WinAPI.OVERLAPPED;
+import static jtermios.JTermios.*;
+import static jtermios.JTermios.JTermiosLogging.*;
+import jtermios.*;
+import jtermios.windows.WinAPI.*;
+import static jtermios.windows.WinAPI.*;
+import static jtermios.windows.WinAPI.DCB.*;
 
 public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 	private volatile int m_ErrNo = 0;
@@ -267,8 +95,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 
 			log = log && log(1, "fail() %s, Windows GetLastError()= %d, %s\n", lineno(1), err, buffer.getWideString(0));
 			
-			System.out.println("XXXX fail()" +  lineno(1) + ", Windows GetLastError()= "  + err + "(" + buffer.getWideString(0) + ")");
-
 			// FIXME here convert from Windows error code to 'posix' error code
 
 			Fail f = new Fail();
@@ -276,16 +102,14 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 
 		synchronized public void lock() throws InterruptedException {
-			while (m_Locked) {
+			while (m_Locked)
 				wait();
-			}
 			m_Locked = true;
 		}
 
 		synchronized public void unlock() {
-			if (!m_Locked) {
+			if (!m_Locked) 
 				throw new IllegalArgumentException("Port was not locked");
-			}
 			m_Locked = false;
 			notifyAll();
 		}
@@ -377,57 +201,50 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 
 				HANDLE h; // / 'hEvent' might never have been 'read' so read it to this var first
 
-				if (m_ReadCancelObject != null) {
+				if (m_ReadCancelObject != null) 
 					SetEvent(m_ReadCancelObject);
-				}
+				
 				synchronized (m_RdBuffer) {
 					h = (HANDLE) m_RdOVL.readField("hEvent");
 					m_RdOVL = null;
-					if (h != null && !h.equals(NULL) && !h.equals(INVALID_HANDLE_VALUE)) {
+					if (h != null && !h.equals(NULL) && !h.equals(INVALID_HANDLE_VALUE)) 
 						CloseHandle(h);
-					}
 
-					if (m_ReadCancelObject != null && m_ReadCancelObject != NULL && m_ReadCancelObject != INVALID_HANDLE_VALUE) {
+					if (m_ReadCancelObject != null && m_ReadCancelObject != NULL && m_ReadCancelObject != INVALID_HANDLE_VALUE) 
 						CloseHandle(m_ReadCancelObject);
-					}
 					m_ReadCancelObject = null;
 				}
 
-				if (m_WriteCancelObject != null) {
+				if (m_WriteCancelObject != null)
 					SetEvent(m_WriteCancelObject);
-				}
+
 				synchronized (m_WrBuffer) {
 					h = (HANDLE) m_WrOVL.readField("hEvent");
 					m_WrOVL = null;
 
-					if (h != null && !h.equals(NULL) && !h.equals(INVALID_HANDLE_VALUE)) {
+					if (h != null && !h.equals(NULL) && !h.equals(INVALID_HANDLE_VALUE))
 						CloseHandle(h);
-					}
 
-					if (m_WriteCancelObject != null && m_WriteCancelObject != NULL && m_WriteCancelObject != INVALID_HANDLE_VALUE) {
+					if (m_WriteCancelObject != null && m_WriteCancelObject != NULL && m_WriteCancelObject != INVALID_HANDLE_VALUE) 
 						CloseHandle(m_WriteCancelObject);
-					}
 					m_ReadCancelObject = null;
 				}
 
-				if (WaitCommEventCancelObject != null) {
+				if (WaitCommEventCancelObject != null)
 					SetEvent(WaitCommEventCancelObject);
-				}
 				waitUnlock();
-				if (WaitCommEventCancelObject != null && WaitCommEventCancelObject != NULL && WaitCommEventCancelObject != INVALID_HANDLE_VALUE) {
+				if (WaitCommEventCancelObject != null && WaitCommEventCancelObject != NULL && WaitCommEventCancelObject != INVALID_HANDLE_VALUE) 
 					CloseHandle(WaitCommEventCancelObject);
-				}
 				WaitCommEventCancelObject = null;
 
 				h = (HANDLE) m_SelOVL.readField("hEvent");
 				m_SelOVL = null;
-				if (h != null && !h.equals(NULL) && !h.equals(INVALID_HANDLE_VALUE)) {
+				if (h != null && !h.equals(NULL) && !h.equals(INVALID_HANDLE_VALUE))
 					CloseHandle(h);
-				}
 
-				if (m_Comm != null && m_Comm != NULL && m_Comm != INVALID_HANDLE_VALUE) {
+				if (m_Comm != null && m_Comm != NULL && m_Comm != INVALID_HANDLE_VALUE)
 					CloseHandle(m_Comm);
-				}
+				
 				m_Comm = null;
 			}
 		}
@@ -448,22 +265,18 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		static final int FD_SET_SIZE = 256; // Windows supports max 255 serial ports so this is enough
 		static final int NFBBITS = 32;
 		int[] bits = new int[(FD_SET_SIZE + NFBBITS - 1) / NFBBITS];
-                @Override
 				public void FD_CLR(int fd) {
                         bits[fd / NFBBITS] &= ~(1 << (fd % NFBBITS));
                 }
 
-                @Override
 				public boolean FD_ISSET(int fd) {
                         return (bits[fd / NFBBITS] & (1 << (fd % NFBBITS))) != 0;
                 }
 
-                @Override
 				public void FD_SET(int fd) {
                         bits[fd / NFBBITS] |= 1 << (fd % NFBBITS);
                 }
 
-                @Override
 				public void FD_ZERO() {
                         java.util.Arrays.fill(bits, 0);
                 }
@@ -473,12 +286,10 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		log = log && log(1, "instantiating %s\n", getClass().getCanonicalName());
 	}
 
-	@Override
 	public int errno() {
 		return m_ErrNo;
 	}
 
-	@Override
 	public void cfmakeraw(Termios termios) {
 		termios.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
 		termios.c_oflag &= ~OPOST;
@@ -487,7 +298,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		termios.c_cflag |= CS8;
 	}
 
-	@Override
 	public int fcntl(int fd, int cmd, int arg) {
 
 		Port port = getPort(fd);
@@ -504,7 +314,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return 0;
 	}
 
-	@Override
 	public int tcdrain(int fd) {
 		Port port = getPort(fd);
 		if (port == null)
@@ -520,29 +329,24 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 
-	@Override
 	public int cfgetispeed(Termios termios) {
 		return termios.c_ispeed;
 	}
 
-	@Override
 	public int cfgetospeed(Termios termios) {
 		return termios.c_ospeed;
 	}
 
-	@Override
 	public int cfsetispeed(Termios termios, int speed) {
 		termios.c_ispeed = speed;
 		return 0;
 	}// Error code for Interrupted = EINTR
 
-	@Override
 	public int cfsetospeed(Termios termios, int speed) {
 		termios.c_ospeed = speed;
 		return 0;
 	}
 
-	@Override
 	public int open(String filename, int flags) {
 		Port port = new Port();
 		try {
@@ -589,7 +393,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return a > b ? a : b;
 	}
 
-	@Override
 	public int read(int fd, byte[] buffer, int length) {
 
 		Port port = getPort(fd);
@@ -666,21 +469,17 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 
 				}
 
-				if (!ResetEvent(port.m_RdOVL.hEvent)) {
+				if (!ResetEvent(port.m_RdOVL.hEvent))
 					port.fail();
-				}
 
 				if (!ReadFile(port.m_Comm, port.m_RdBuffer, length, port.m_RdN, port.m_RdOVL)) {
-					if (GetLastError() != ERROR_IO_PENDING) {
+					if (GetLastError() != ERROR_IO_PENDING)
 						port.fail();
-					}
 					port.m_ReadWaitObjects[0] = port.m_RdOVL.hEvent;
-					if (WaitForMultipleObjects(2, port.m_ReadWaitObjects, false, INFINITE) != WAIT_OBJECT_0) {
+					if (WaitForMultipleObjects(2, port.m_ReadWaitObjects, false, INFINITE) != WAIT_OBJECT_0)
 						port.fail();
-					}
-					if (!GetOverlappedResult(port.m_Comm, port.m_RdOVL, port.m_RdN, true)) {
+					if (!GetOverlappedResult(port.m_Comm, port.m_RdOVL, port.m_RdN, true))
 						port.fail();
-					}
 				}
 
 				port.m_RdBuffer.read(0, buffer, 0, port.m_RdN[0]);
@@ -691,12 +490,10 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 
-	@Override
 	public int write(int fd, byte[] buffer, int length) {
 		Port port = getPort(fd);
-		if (port == null) {
+		if (port == null)
 			return -1;
-		}
 
 		synchronized (port.m_WrBuffer) {
 			try {
@@ -710,35 +507,32 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 							log = log && log(1, "write pending, cbInQue %d cbOutQue %d\n", port.m_COMSTAT.cbInQue, port.m_COMSTAT.cbOutQue);
 							continue;
 						}
-						if (!GetOverlappedResult(port.m_Comm, port.m_WrOVL, port.m_WrN, false)) {
+						if (!GetOverlappedResult(port.m_Comm, port.m_WrOVL, port.m_WrN, false))
 							port.fail();
-						}
-						if (port.m_WrN[0] != port.m_WritePending) { // I exptect this is never going to happen, if it does
+
+						if (port.m_WrN[0] != port.m_WritePending) // I exptect this is never going to happen, if it does
 							new RuntimeException("Windows OVERLAPPED WriteFile failed to write all, tried to write " + port.m_WritePending + " but got " + port.m_WrN[0]);
-						}
 						break;
 					}
 					port.m_WritePending = 0;
 				}
 				if ((port.m_OpenFlags & O_NONBLOCK) != 0) {
-					if (!ClearCommError(port.m_Comm, port.m_WrErr, port.m_WrStat)) {
+					if (!ClearCommError(port.m_Comm, port.m_WrErr, port.m_WrStat))
 						port.fail();
-					}
+
 					int room = (int) port.m_WrBuffer.size() - port.m_WrStat.cbOutQue;
-					if (length > room) {
+					if (length > room)
 						length = room;
-					}
 				}
 
 				int old_flag;
 
-				if (!ResetEvent(port.m_WrOVL.hEvent)) {
+				if (!ResetEvent(port.m_WrOVL.hEvent))
 					port.fail();
-				}
 
-				if (length > port.m_WrBuffer.size()) {
+				if (length > port.m_WrBuffer.size())
 					length = (int) port.m_WrBuffer.size();
-				}
+
 				port.m_WrBuffer.write(0, buffer, 0, length); // copy from buffer to Memory
 				boolean ok = WriteFile(port.m_Comm, port.m_WrBuffer, length, port.m_WrN, port.m_WrOVL);
 
@@ -755,7 +549,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 
-	@Override
 	public int close(int fd) {
 		Port port = getPort(fd);
 		if (port == null)
@@ -764,7 +557,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return 0;
 	}
 
-	@Override
 	public int tcflush(int fd, int queue) {
 		Port port = getPort(fd);
 		if (port == null)
@@ -803,7 +595,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 	 * @see jtermios.JTermios.JTermiosInterface#tcgetattr(int, jtermios.Termios)
 	 */
 
-	@Override
 	public int tcgetattr(int fd, Termios termios) {
 		Port port = getPort(fd);
 		if (port == null)
@@ -812,7 +603,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return 0;
 	}
 
-	@Override
 	public int tcsendbreak(int fd, int duration) {
 		Port port = getPort(fd);
 		if (port == null)
@@ -829,7 +619,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 
-	@Override
 	public int tcsetattr(int fd, int cmd, Termios termios) {
 		if (cmd != TCSANOW)
 			log(0, "tcsetattr only supports TCSANOW\n");
@@ -1013,7 +802,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 	
-	@Override
 	public int select(int n, FDSet readfds, FDSet writefds, FDSet exceptfds, TimeVal timeout) {
 		// long T0 = System.currentTimeMillis();
 		int ready = 0;
@@ -1029,9 +817,8 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 					FD_CLR(fd, writefds);
 					if (rd || wr) {
 						Port port = getPort(fd);
-						if (port == null) {
+						if (port == null)
 							return -1;
-						}
 				
 						try {
 							port.lock();
@@ -1054,9 +841,9 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 							}
 
 							if (port.m_WaitPending) {
-								if (!SetCommMask(port.m_Comm, 0)) {
+								if (!SetCommMask(port.m_Comm, 0))
 									port.fail();
-								}
+
 								if (!GetOverlappedResult(port.m_Comm, port.m_SelOVL, port.m_SelN, false)) {
 									int lastError = GetLastError();
 									if (lastError != ERROR_IO_INCOMPLETE) {
@@ -1066,26 +853,21 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 								port.m_WaitPending = false;
 							}
 
-							if (!ResetEvent(port.m_SelOVL.hEvent)) {
+							if (!ResetEvent(port.m_SelOVL.hEvent))
 								port.fail();
-							}
 
 							int flags = 0;
-							if (rd) {
+							if (rd)
 								flags |= EV_RXCHAR;
-							}
-							if (wr) {
+							if (wr)
 								flags |= EV_TXEMPTY;
-							}
 
-							if (!SetCommMask(port.m_Comm, flags)) {
+							if (!SetCommMask(port.m_Comm, flags))
 								port.fail();
-							}
 							
 							if (WaitCommEvent(port.m_Comm, port.m_EventFlags, port.m_SelOVL)) {
-								if (!GetOverlappedResult(port.m_Comm, port.m_SelOVL, port.m_SelN, false)) {
+								if (!GetOverlappedResult(port.m_Comm, port.m_SelOVL, port.m_SelN, false))
 									port.fail();
-								}
 								// actually it seems that overlapped
 								// WaitCommEvent never returns true so we never get here
 								ready = maskToFDSets(port, readfds, writefds, exceptfds, ready);
@@ -1128,9 +910,9 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 								clearCommErrors(port);
 								int[] mask = { 0 };
 
-								if (!GetCommMask(port.m_Comm, mask)) {
+								if (!GetCommMask(port.m_Comm, mask))
 									port.fail();
-								}
+								
 								if (port.m_COMSTAT.cbInQue > 0 && ((mask[0] & EV_RXCHAR) != 0)) {
 									FD_SET(port.m_FD, readfds);
 									log = log && log(1, "missed EV_RXCHAR event\n");
@@ -1145,17 +927,16 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 
 						} else {
 							i = (res - WAIT_OBJECT_0) / 2;
-							if (i < 0 || i >= waitn) {
+							if (i < 0 || i >= waitn)
 								throw new Fail();
-							}
+
 							if (((res - WAIT_OBJECT_0) & 1) == 1) {
 								// it was the cancel sema4 so just return 
 								return 0;
 							}
 							Port port = waiting.get(i);
-							if (!GetOverlappedResult(port.m_Comm, port.m_SelOVL, port.m_SelN, false)) {
+							if (!GetOverlappedResult(port.m_Comm, port.m_SelOVL, port.m_SelN, false))
 								port.fail();
-							}
 
 							ready = maskToFDSets(port, readfds, writefds, exceptfds, ready);
 							port.m_WaitPending = false;
@@ -1175,9 +956,8 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 				return -1;
 			}
 		} finally {
-			for (Port port : locked) {
+			for (Port port : locked)
 				port.unlock();
-			}
 		}
 		// long T1 = System.currentTimeMillis();
 		// System.err.println("select() " + (T1 - T0));
@@ -1185,7 +965,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return ready;
 	}
 
-	@Override
 	public int poll(Pollfd fds[], int nfds, int timeout) {
 		m_ErrNo = EINVAL;
 		return -1;
@@ -1196,18 +975,14 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return -1;
 	}
 	
-    @Override
 	public boolean canPoll() {
         return false;
     }
 
 
-
-	@Override
 	public void perror(String msg) {
-		if (msg != null && msg.length() > 0) {
+		if (msg != null && msg.length() > 0)
 			System.out.print(msg + ": ");
-		}
 		System.out.printf("%d\n", m_ErrNo);
 	}
 
@@ -1251,7 +1026,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 
-	@Override
 	public FDSet newFDSet() {
 		return new FDSetImpl();
 	}
@@ -1284,7 +1058,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		java.util.Arrays.fill(p.bits, 0);
 	}
 
-	@Override
 	public int ioctl(int fd, int cmd, int[] arg) {
 		Port port = getPort(fd);
 		if (port == null)
@@ -1380,12 +1153,10 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 	}
 
 
-	@Override
 	public String getPortNamePattern() {
 		return "^COM.*";
 	}
 
-	@Override
 	public List<String> getPortList() {
 		Pattern p = JTermios.getPortNamePattern(this);
 		byte[] buffer;
@@ -1416,7 +1187,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return null;
 	}
 
-	@Override
 	public void shutDown() {
 		for (Port port : m_OpenPorts.values()) {
 			try {
@@ -1429,7 +1199,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		}
 	}
 
-	@Override
 	public int setspeed(int fd, Termios termios, int speed) {
 		int br = speed;
 		switch (speed) {
@@ -1510,7 +1279,6 @@ public class JTermiosImpl implements jtermios.JTermios.JTermiosInterface {
 		return 0;
 	}
 
-	@Override
 	public int pipe(int[] fds) {
 		m_ErrNo = EMFILE; // pipe() not implemented on Windows backend
 		return -1;
